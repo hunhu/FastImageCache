@@ -79,6 +79,13 @@ typedef void (^FICImageRequestCompletionBlock)(UIImage *sourceImage);
 + (instancetype)sharedImageCache;
 
 /**
+ Sets the file system parent path for the directory that stores image table files.
+ 
+ @param path The string representing the file system directory path where image table files are stored.
+ */
+- (void)setParentDirectoryPath:(NSString *)path;
+
+/**
  Returns the shared dispatch queue used by all instances of `FICImageCache`.
  
  @return A generic, shared dispatch queue of type `dispatch_queue_t`.

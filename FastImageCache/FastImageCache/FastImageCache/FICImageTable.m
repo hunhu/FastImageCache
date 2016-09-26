@@ -31,6 +31,8 @@ static NSString *const FICImageTableContextMapKey = @"contextMap";
 static NSString *const FICImageTableMRUArrayKey = @"mruArray";
 static NSString *const FICImageTableFormatKey = @"format";
 
+static NSString *parentDirectoryPath;
+
 #pragma mark - Class Extension
 
 @interface FICImageTable () {
@@ -117,21 +119,29 @@ static NSString *const FICImageTableFormatKey = @"format";
 }
 
 + (NSString *)directoryPath {
-    static NSString *__directoryPath = nil;
+  static NSString *__directoryPath = nil;
+  
+  static dispatch_once_t onceToken;
+  dispatch_once(&onceToken, ^{
+    if (parentDirectoryPath) {
+      __directoryPath = [parentDirectoryPath stringByAppendingPathComponent:@"ImageTables"];
+    } else {
+      NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+      __directoryPath = [[paths objectAtIndex:0] stringByAppendingPathComponent:@"ImageTables"];
+    }
     
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-        __directoryPath = [[paths objectAtIndex:0] stringByAppendingPathComponent:@"ImageTables"];
-        
-        NSFileManager *fileManager = [[NSFileManager alloc] init];
-        BOOL directoryExists = [fileManager fileExistsAtPath:__directoryPath];
-        if (directoryExists == NO) {
-            [fileManager createDirectoryAtPath:__directoryPath withIntermediateDirectories:YES attributes:nil error:nil];
-        }
-    });
-    
-    return __directoryPath;
+    NSFileManager *fileManager = [[NSFileManager alloc] init];
+    BOOL directoryExists = [fileManager fileExistsAtPath:__directoryPath];
+    if (directoryExists == NO) {
+      [fileManager createDirectoryAtPath:__directoryPath withIntermediateDirectories:YES attributes:nil error:nil];
+    }
+  });
+  
+  return __directoryPath;
+}
+
++ (void)setParentDirectoryPath:(NSString *)path {
+  parentDirectoryPath = path;
 }
 
 #pragma mark - Object Lifecycle

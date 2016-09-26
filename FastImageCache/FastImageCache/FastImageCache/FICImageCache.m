@@ -65,6 +65,10 @@ static NSString *const FICImageCacheEntityKey = @"FICImageCacheEntityKey";
     return __imageCache;
 }
 
+- (void)setParentDirectoryPath:(NSString *)path {
+  [FICImageTable setParentDirectoryPath:path];
+}
+
 + (dispatch_queue_t)dispatchQueue {
     static dispatch_queue_t __imageCacheDispatchQueue = NULL;
     static dispatch_once_t onceToken;

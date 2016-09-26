@@ -66,6 +66,13 @@ extern NSString *const FICImageTableScreenScaleKey;
  */
 + (NSString *)directoryPath;
 
+/**
+ Sets the file system parent path for the directory that stores image table files.
+ 
+ @param path The string representing the file system directory path where image table files are stored.
+ */
++ (void)setParentDirectoryPath:(NSString *)path;
+
 ///----------------------------------
 /// @name Initializing an Image Table
 ///----------------------------------
